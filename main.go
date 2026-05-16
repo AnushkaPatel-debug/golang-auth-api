@@ -5,6 +5,7 @@ import (
 	"golang-auth-api/handlers"
 	"golang-auth-api/middleware"
 	"golang-auth-api/models"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,5 +24,11 @@ func main() {
 	r.POST("/login", handlers.Login)
 	r.GET("/profile", middleware.AutheMiddleware(), handlers.Profile)
 	r.GET("/users", middleware.AutheMiddleware(), middleware.AdminMiddleware(), handlers.GetUsers)
-	r.Run(":8090")
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = "8090"
+	}
+
+	r.Run(":" + port)
 }
